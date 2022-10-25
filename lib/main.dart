@@ -45,18 +45,7 @@ class MyApp extends StatelessWidget {
               ])
             ],
           )),
-          ElevatedButton(
-            onPressed: () {
-              print('hoge');
-            },
-            style: ElevatedButton.styleFrom(
-              primary: color,
-            ),
-            child: const Text(
-              '予約する',
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-          )
+          const ReservedWidget()
         ],
       ),
     );
@@ -81,15 +70,7 @@ class MyApp extends StatelessWidget {
                   style: TextStyle(color: Colors.grey[500])),
             ],
           )),
-          Row(
-            children: [
-              Container(
-                margin: const EdgeInsets.only(right: 5),
-                child: Icon(Icons.star, color: Colors.red[500]),
-              ),
-              const Text('41'),
-            ],
-          )
+          const FavoriteWidget(),
         ],
       ),
     );
@@ -157,6 +138,90 @@ class MyApp extends StatelessWidget {
             ))
       ],
     );
+  }
+}
+
+class FavoriteWidget extends StatefulWidget {
+  const FavoriteWidget({super.key});
+
+  @override
+  State<FavoriteWidget> createState() => _FavoriteWidgetState();
+}
+
+class _FavoriteWidgetState extends State<FavoriteWidget> {
+  bool _isFavorited = true;
+  int _favoriteCount = 41;
+
+  void _toggleFavorite() {
+    setState(() {
+      _isFavorited ? _favoriteCount -= 1 : _favoriteCount += 1;
+      _isFavorited = !_isFavorited;
+
+      // if (_isFavorited) {
+      //   _favoriteCount -= 1;
+      //   _isFavorited = false;
+      // } else {
+      //   _favoriteCount += 1;
+      //   _isFavorited = true;
+      // }
+      print(_favoriteCount);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          padding: const EdgeInsets.all(0),
+          child: IconButton(
+            padding: const EdgeInsets.all(0),
+            alignment: Alignment.centerRight,
+            icon: (_isFavorited
+                ? const Icon(Icons.star)
+                : const Icon(Icons.star_border)),
+            color: Colors.red[500],
+            onPressed: _toggleFavorite,
+          ),
+        ),
+        SizedBox(
+          width: 18,
+          child: SizedBox(child: Text('$_favoriteCount')),
+        )
+      ],
+    );
+  }
+}
+
+class ReservedWidget extends StatefulWidget {
+  const ReservedWidget({super.key});
+
+  @override
+  State<ReservedWidget> createState() => _ReservedWidgetState();
+}
+
+class _ReservedWidgetState extends State<ReservedWidget> {
+  bool _isReserved = false;
+  void _handleChangeReserved() {
+    setState(() {
+      _isReserved = !_isReserved;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+        onPressed: () {
+          _handleChangeReserved();
+        },
+        style: ElevatedButton.styleFrom(
+          primary: (_isReserved ? Colors.green : Colors.blue),
+        ),
+        child: (_isReserved
+            ? const Text('予約済み', style: TextStyle(fontWeight: FontWeight.bold))
+            : const Text('予約する',
+                style: TextStyle(fontWeight: FontWeight.bold))));
   }
 }
 
