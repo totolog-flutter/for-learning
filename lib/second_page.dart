@@ -13,6 +13,7 @@ class SecondPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Image.asset('images/hotel1.avif'),
             Text(
               name,
               style: const TextStyle(fontSize: 30),
