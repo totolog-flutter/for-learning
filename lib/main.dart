@@ -61,7 +61,7 @@ class MyHomePage extends StatelessWidget {
                       ),
                       padding: EdgeInsets.all(10),
                       child: Text(
-                        tx.amount.toString(),
+                        '¥: ${tx.amount.toString()}',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 20,
