@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 
 class NewTransaction extends StatefulWidget {
   // const NewTransaction({super.key});
-  final void Function(String, double) addTransactionHandler;
+  final void Function(String, double, DateTime) addTransactionHandler;
 
 
   NewTransaction({
@@ -21,10 +21,15 @@ class _NewTransactionState extends State<NewTransaction> {
   DateTime _selectedDate = DateTime.now();
 
   void _submitData() {
+    if(_amountController.text.isEmpty) return;
     final enteredTitle = _titleController.text;
     final enteredAmount = double.parse(_amountController.text);
-    if(enteredTitle.isEmpty || enteredAmount <= 0) return;
-    widget.addTransactionHandler(_titleController.text, double.parse(_amountController.text));
+    if(enteredTitle.isEmpty || enteredAmount <= 0 || _selectedDate == null) return;
+    widget.addTransactionHandler(
+      _titleController.text,
+      double.parse(_amountController.text),
+      _selectedDate
+    );
     Navigator.of(context).pop();
   }
 
@@ -68,10 +73,12 @@ class _NewTransactionState extends State<NewTransaction> {
               height: 70,
               child: Row(
                 children: [
-                  Text(
-                    _selectedDate == null
-                      ? 'No date Chosen!'
-                      :'選択日: ${DateFormat.yMd().format(_selectedDate)}',
+                  Expanded(
+                    child: Text(
+                      _selectedDate == null
+                        ? 'No date Chosen!'
+                        :'選択日: ${DateFormat.yMd().format(_selectedDate)}',
+                    ),
                   ),
                   TextButton(
                     onPressed: _presentDatePicker,
