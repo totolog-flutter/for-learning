@@ -17,7 +17,8 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.purple,
-        accentColor: Colors.yellow
+        // accentColor: Colors.yellow,
+        // fontFamily: 'Quicksand',
       ),
       home: MyHomePage(),
     );
@@ -35,8 +36,8 @@ class _MyHomePageState extends State<MyHomePage> {
   final amountController = TextEditingController();
 
   final List<Transaction> _userTransactions = [
-    Transaction(id: 't1', title: 'ランニングシューズ', amount: 18000, date: DateTime.now()),
-    Transaction(id: 't2', title: '１週間分の野菜', amount: 9800, date: DateTime.now())
+    // Transaction(id: 't1', title: 'ランニングシューズ', amount: 18000, date: DateTime.now()),
+    // Transaction(id: 't2', title: '１週間分の野菜', amount: 9800, date: DateTime.now())
   ];
 
   void _addNewTransaction(String txTitle, double txAmount) {
