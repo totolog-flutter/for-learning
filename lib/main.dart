@@ -112,7 +112,10 @@ class _MyHomePageState extends State<MyHomePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text('Show Chart'),
-                Switch(value: _showChart, onChanged: (value) {
+                Switch.adaptive(
+                  activeColor: Colors.purple,
+                  value: _showChart,
+                  onChanged: (value) {
                   setState(() {
                     _showChart = value;
                   });
