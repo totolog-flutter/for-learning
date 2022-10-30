@@ -51,7 +51,7 @@ class TransactionList extends StatelessWidget {
                 color: Colors.grey
               ),
             ),
-            trailing: MediaQuery.of(context).size.width > 360
+            trailing: MediaQuery.of(context).size.width > 460
               ? TextButton.icon(
                 icon: Icon(Icons.delete, color: Colors.red,),
                 label: Text('Delete', style: TextStyle(color: Colors.red),),
