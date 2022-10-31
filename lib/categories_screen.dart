@@ -7,7 +7,11 @@ class CategoriesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GridView(
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('DeliMeal'),
+      ),
+        body: GridView(
       children: DUMMY_CATEGORIES
           .map((catData) =>
               CategoryItem(title: catData.title, color: catData.color))
@@ -17,6 +21,6 @@ class CategoriesScreen extends StatelessWidget {
           childAspectRatio: 1.5,
           crossAxisSpacing: 20,
           mainAxisSpacing: 20),
-    );
+    ));
   }
 }
