@@ -1,12 +1,30 @@
 import 'package:flutter/material.dart';
+import '../models/meal.dart';
+import '../widgets/meal_item.dart';
 
 class FavoriteScreen extends StatelessWidget {
-  const FavoriteScreen({super.key});
+  final List<Meal> favoriteMeals;
+  const FavoriteScreen(this.favoriteMeals);
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Text('favorite'),
-    );
+    if (favoriteMeals.isEmpty) {
+      return Center(
+        child: Text('お気に入りの料理がないよ。追加してね。'),
+      );
+    } else {
+      return ListView.builder(
+          itemBuilder: (context, index) {
+            return MealItem(
+              id: favoriteMeals[index].id,
+              title: favoriteMeals[index].title,
+              imageUrl: favoriteMeals[index].imageUrl,
+              duration: favoriteMeals[index].duration,
+              complexity: favoriteMeals[index].complexity,
+              affordability: favoriteMeals[index].affordability,
+            );
+          },
+          itemCount: favoriteMeals.length);
+    }
   }
 }
