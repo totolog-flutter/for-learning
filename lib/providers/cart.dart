@@ -18,6 +18,7 @@ class Cart with ChangeNotifier {
   Map<String, CartItem> _items = {};
 
   Map<String, CartItem> get items {
+    print({..._items});
     return {..._items};
   }
 
