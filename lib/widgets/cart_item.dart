@@ -35,6 +35,28 @@ class CartItem extends StatelessWidget {
         margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
       ),
       direction: DismissDirection.endToStart,
+      confirmDismiss: (direction) {
+        return showDialog(
+            context: context,
+            builder: ((context) => AlertDialog(
+                  title: Text('確認'),
+                  content: Text('本当にこの商品を削除しますか'),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop(false);
+                      },
+                      child: Text('いいえ'),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop(true);
+                      },
+                      child: Text('はい'),
+                    ),
+                  ],
+                )));
+      },
       onDismissed: (direction) {
         Provider.of<Cart>(context, listen: false).removeItem(productId);
       },
