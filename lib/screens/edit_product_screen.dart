@@ -36,6 +36,11 @@ class _EditProductScreenState extends State<EditProductScreen> {
 
   void _updateImageUrl() {
     if (!_imageUrlFocusNode.hasFocus) {
+      if ((!_imageUrlController.text.endsWith('.png') &&
+              !_imageUrlController.text.endsWith('.jpg') &&
+              !_imageUrlController.text.endsWith('.jpeg')) ||
+          (!_imageUrlController.text.startsWith('http') &&
+              !_imageUrlController.text.startsWith('https'))) return;
       setState(() {});
     }
   }
@@ -96,6 +101,13 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   onFieldSubmitted: (_) {
                     FocusScope.of(context).requestFocus(_descriptionFocusNode);
                   },
+                  validator: (value) {
+                    if (value!.isEmpty) return '価格を入力してください';
+                    if (double.tryParse(value) == null)
+                      return '有効な数字を入力してください。';
+                    if (double.parse(value) <= 0) return '0より大きい数字を入力してください。';
+                    return null;
+                  },
                   onSaved: (value) {
                     _editedProduct = Product(
                       id: _editedProduct.id,
@@ -111,6 +123,11 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   maxLines: 3,
                   keyboardType: TextInputType.multiline,
                   focusNode: _descriptionFocusNode,
+                  validator: (value) {
+                    if (value!.isEmpty) return '詳細を入力してください';
+                    if (value.length < 10) return '10文字より多くしてください';
+                    return null;
+                  },
                   onSaved: (value) {
                     _editedProduct = Product(
                       id: _editedProduct.id,
@@ -161,6 +178,16 @@ class _EditProductScreenState extends State<EditProductScreen> {
                       },
                       onFieldSubmitted: (_) {
                         _saveForm();
+                      },
+                      validator: (value) {
+                        if (value!.isEmpty) return '画像のURLを入力してください';
+                        if (!value.endsWith('.png') &&
+                            !value.endsWith('.jpg') &&
+                            !value.endsWith('.jpeg'))
+                          return '有効な画像URLを入力してください';
+                        if (!value.startsWith('http') &&
+                            !value.startsWith('https')) return '有効な値を入力してください';
+                        return null;
                       },
                       onSaved: (value) {
                         _editedProduct = Product(
