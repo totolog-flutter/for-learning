@@ -67,24 +67,35 @@ class Products with ChangeNotifier {
   // }
 
   void addProducts(Product product) {
-    final url = Uri.parse('https://flutter-shop-app-1d512-default-rtdb.firebaseio.com/products.json');
-    http.post(url, body: json.encode({
-      'title': product.title,
-      'description': product.description,
-      'imageUrl': product.imageUrl,
-      'price': product.price,
-      'isFavorite': product.isFavorite,
-    }));
-    final newProduct = Product(
-      id: new DateTime.now().toString(),
-      title: product.title,
-      price: product.price,
-      description: product.description,
-      imageUrl: product.imageUrl,
-    );
-    _items.add(newProduct);
-    // _items.insert(0, newProduct);
-    notifyListeners();
+    final url = Uri.parse(
+        'https://flutter-shop-app-1d512-default-rtdb.firebaseio.com/products.json');
+    http
+        .post(
+      url,
+      body: json.encode(
+        {
+          'title': product.title,
+          'description': product.description,
+          'imageUrl': product.imageUrl,
+          'price': product.price,
+          'isFavorite': product.isFavorite,
+        },
+      ),
+    )
+        .then((response) {
+      print(json.decode(response.body));
+      final newProduct = Product(
+        id: new DateTime.now().toString(),
+        // id: json.decode(response.body['name']),
+        title: product.title,
+        price: product.price,
+        description: product.description,
+        imageUrl: product.imageUrl,
+      );
+      _items.add(newProduct);
+      // _items.insert(0, newProduct);
+      notifyListeners();
+    });
   }
 
   void updateProduct(String id, Product newProduct) {
