@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../screens/edit_product_screen.dart';
 import '../providers/products.dart';
-import '../widgets/user_priduct_item.dart';
+import '../widgets/user_product_item.dart';
 import '../widgets/app_drawer.dart';
 
 class UserProductsScreen extends StatelessWidget {
@@ -30,7 +30,9 @@ class UserProductsScreen extends StatelessWidget {
           itemCount: productsData.items.length,
           itemBuilder: (context, index) => Column(
             children: [
-              UserProductItem(productsData.items[index].title,
+              UserProductItem(
+                  productsData.items[index].id,
+                  productsData.items[index].title,
                   productsData.items[index].imageUrl),
               Divider(),
             ],
