@@ -76,7 +76,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
     }
   }
 
-  void _saveForm() {
+  Future<void> _saveForm() async {
     if (!_form.currentState!.validate()) return;
     _form.currentState!.save();
     setState(() {
@@ -90,10 +90,11 @@ class _EditProductScreenState extends State<EditProductScreen> {
       });
       Navigator.of(context).pop();
     } else {
-      Provider.of<Products>(context, listen: false)
-          .addProducts(_editedProduct)
-          .catchError((error) {
-        return showDialog<Null>(
+      try {
+        await Provider.of<Products>(context, listen: false)
+            .addProducts(_editedProduct);
+      } catch (error) {
+        await showDialog<Null>(
             context: context,
             builder: (context) => AlertDialog(
                   title: Text('エラーが発生しました.'),
@@ -106,12 +107,12 @@ class _EditProductScreenState extends State<EditProductScreen> {
                         child: Text('OK'))
                   ],
                 ));
-      }).then((_) => {
-                setState(() {
-                  _isLoading = false;
-                }),
-                Navigator.of(context).pop()
-              });
+      } finally {
+        setState(() {
+          _isLoading = false;
+        });
+        Navigator.of(context).pop();
+      }
     }
   }
 

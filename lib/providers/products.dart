@@ -66,27 +66,25 @@ class Products with ChangeNotifier {
   //   notifyListeners();
   // }
 
-  Future<void> addProducts(Product product) {
+  Future<void> addProducts(Product product) async {
     final url = Uri.parse(
         'https://flutter-shop-app-1d512-default-rtdb.firebaseio.com/products.json');
-    return http
-        .post(
-      url,
-      body: json.encode(
-        {
-          'title': product.title,
-          'description': product.description,
-          'imageUrl': product.imageUrl,
-          'price': product.price,
-          'isFavorite': product.isFavorite,
-        },
-      ),
-    )
-        .then((response) {
-      print(json.decode(response.body));
+    try {
+      final response = await http.post(
+        url,
+        body: json.encode(
+          {
+            'title': product.title,
+            'description': product.description,
+            'imageUrl': product.imageUrl,
+            'price': product.price,
+            'isFavorite': product.isFavorite,
+          },
+        ),
+      );
       final newProduct = Product(
-        id: new DateTime.now().toString(),
-        // id: json.decode(response.body['name']),
+        // id: new DateTime.now().toString(),
+        id: json.decode(response.body['name'] as String),
         title: product.title,
         price: product.price,
         description: product.description,
@@ -95,10 +93,11 @@ class Products with ChangeNotifier {
       _items.add(newProduct);
       // _items.insert(0, newProduct);
       notifyListeners();
-    }).catchError((error) {
+    } catch (error) {
       print(error);
       throw error;
-    });
+    }
+    // .then((response) {
   }
 
   void updateProduct(String id, Product newProduct) {
