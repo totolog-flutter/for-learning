@@ -152,10 +152,11 @@ class _AuthCardState extends State<AuthCard> {
         errorMessage = 'Invalid password.';
       }
       _showErrorDialog(errorMessage);
-    } catch (error) {
-      const errorMessage = '認証できませんでした。再度やり直してください。';
-      _showErrorDialog(errorMessage);
     }
+    // catch (error) {
+    //   const errorMessage = '認証できませんでした。再度やり直してください。';
+    //   _showErrorDialog(errorMessage);
+    // }
     setState(() {
       _isLoading = false;
     });
