@@ -17,39 +17,47 @@ class OrderScreen extends StatefulWidget {
 }
 
 class _OrderScreenState extends State<OrderScreen> {
-  var _isLoading = false;
+  Future? _ordersFuture;
+  Future _obtaineOrdersFuture() {
+    return Provider.of<Orders>(context, listen: false).fetchAndSetOrders();
+  }
+
   @override
   void initState() {
-    Future.delayed(Duration.zero).then((_) async {
-      setState(() {
-        _isLoading = true;
-      });
-      await Provider.of<Orders>(context, listen: false);
-      setState(() {
-        _isLoading = false;
-      });
-    });
+    _ordersFuture = _obtaineOrdersFuture();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    final orderData = Provider.of<Orders>(context);
     return Scaffold(
-      appBar: AppBar(
-        title: Text('注文履歴'),
-      ),
-      drawer: AppDrawer(),
-      body: _isLoading
-          ? Center(
-              child: CircularProgressIndicator(),
-            )
-          : ListView.builder(
-              itemCount: orderData.orders.length,
-              itemBuilder: ((context, index) => OrderItem(
-                    orderData.orders[index],
-                  )),
-            ),
-    );
+        appBar: AppBar(
+          title: const Text('注文履歴'),
+        ),
+        drawer: AppDrawer(),
+        body: FutureBuilder(
+          future: _ordersFuture,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            } else {
+              if (snapshot.error != null) {
+                return const Center(
+                  child: Text('エラーが発生しました'),
+                );
+              } else {
+                return Consumer<Orders>(
+                  builder: (context, orderData, child) => ListView.builder(
+                    itemCount: orderData.orders.length,
+                    itemBuilder: (context, index) =>
+                        OrderItem(orderData.orders[index]),
+                  ),
+                );
+              }
+            }
+          },
+        ));
   }
 }
