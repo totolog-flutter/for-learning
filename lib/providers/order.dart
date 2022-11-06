@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import '../providers/auth.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import './cart.dart';
@@ -19,6 +20,8 @@ class OrderItem {
 
 class Orders with ChangeNotifier {
   List<OrderItem> _orders = [];
+  final authToken;
+  Orders(this.authToken, this._orders);
 
   List<OrderItem> get orders {
     return [..._orders];
@@ -26,7 +29,7 @@ class Orders with ChangeNotifier {
 
   Future<void> fetchAndSetOrders() async {
     final url = Uri.parse(
-        'https://flutter-shop-app-1d512-default-rtdb.firebaseio.com/orders.json');
+        'https://flutter-shop-app-1d512-default-rtdb.firebaseio.com/orders.json?auth=$authToken');
     try {
       final response = await http.get(url);
       final List<OrderItem> loadedOrders = [];
@@ -58,7 +61,7 @@ class Orders with ChangeNotifier {
 
   Future<void> addOrder(List<CartItem> cartProducts, double total) async {
     final url = Uri.parse(
-        'https://flutter-shop-app-1d512-default-rtdb.firebaseio.com/orders.json');
+        'https://flutter-shop-app-1d512-default-rtdb.firebaseio.com/orders.json?auth=$authToken');
     try {
       final timestamp = DateTime.now();
       final response = await http.post(
