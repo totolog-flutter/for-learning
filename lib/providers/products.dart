@@ -107,7 +107,7 @@ class Products with ChangeNotifier {
       );
       final newProduct = Product(
         id: new DateTime.now().toString(),
-        // id: json.decode(response.body['name'] as String),
+        // id: jsonDecode(response.body['name']),
         title: product.title,
         price: product.price,
         description: product.description,
@@ -123,9 +123,17 @@ class Products with ChangeNotifier {
     // .then((response) {
   }
 
-  void updateProduct(String id, Product newProduct) {
+  Future<void> updateProduct(String id, Product newProduct) async {
     final prodIndex = _items.indexWhere((product) => product.id == id);
     if (prodIndex >= 0) {
+      final url = Uri.parse(
+          'https://flutter-shop-app-1d512-default-rtdb.firebaseio.com/products$id.json');
+      await http.patch(url, body: jsonEncode({
+        'title': newProduct.title,
+        'description': newProduct.description,
+        'price': newProduct.price,
+        'imageUrl': newProduct.imageUrl,
+      }));
       _items[prodIndex] = newProduct;
       notifyListeners();
     }
