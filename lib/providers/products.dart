@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_youtube1/models/http_exception.dart';
 import 'package:http/http.dart' as http;
 import './product.dart';
 
@@ -140,18 +141,20 @@ class Products with ChangeNotifier {
     }
   }
 
-  void deleteProduct(String id) {
+  Future<void> deleteProduct(String id) async {
     final url = Uri.parse(
         'https://flutter-shop-app-1d512-default-rtdb.firebaseio.com/products$id.json');
     final existingProductIndex =
         _items.indexWhere((product) => product.id == id);
     var existingProduct = _items[existingProductIndex];
-    http
-        .delete(url)
-        .then((response) => {if (response.statusCode >= 400) {}})
-        .catchError((error) {
+    _items.removeAt(existingProductIndex);
+    notifyListeners();
+    final response = await http.delete(url);
+    if (response.statusCode >= 400) {
       _items.insert(existingProductIndex, existingProduct);
       notifyListeners();
-    });
+      throw HttpException('削除できませんでした');
+    }
+    ;
   }
 }
