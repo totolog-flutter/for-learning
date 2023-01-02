@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import './schemas/schema.dart';
-import 'package:realm/realm.dart';
+import 'package:flutter_youtube1/controllers/main.controller.dart';
+import 'package:flutter_youtube1/service/realm.dart';
 
 void main() {
   runApp(MyApp());
@@ -8,15 +8,7 @@ void main() {
 
 class MyApp extends StatelessWidget {
   MyApp({super.key}) {
-    late Realm realm;
-    List<SchemaObject> schemaObjects = [Member.schema, Department.schema];
-    final config = Configuration.local(schemaObjects);
-    realm = Realm(config);
-    // print('realmPath: ${config.path}');
-    final department = Department(ObjectId(), 'develop');
-    final member = Member(ObjectId(), 'Hana Kojima', 'hana.kojima@sample.com');
-    department.members.add(member);
-    realm.write(() => realm.add(department));
+    RealmService.realmInstance.initialize();
   }
   @override
   Widget build(BuildContext context) {
@@ -34,12 +26,20 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final MainController mainController = MainController();
   int _counter = 0;
 
-  void _incrementCounter() {
+  @override
+  void initState() {
+    mainController.getMembers();
+    super.initState();
+  }
+
+  void _addMember() {
     setState(() {
       _counter++;
     });
+    mainController.addMember(_counter);
   }
 
   @override
@@ -63,8 +63,8 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
+        onPressed: _addMember,
+        tooltip: 'AddMember',
         child: const Icon(Icons.add),
       ),
     );
